@@ -1,0 +1,481 @@
+/* ═══════════════════════════════════════════════════════════════
+   WAREHOUSE — Dynamic Pricing TUI Stylesheet
+   Modern industrial warehouse aesthetic with amber/green accents
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Global ── */
+Screen {
+    background: #0d1117;
+    color: #c9d1d9;
+}
+
+Header {
+    background: #161b22;
+    color: #f0883e;
+    text-style: bold;
+    dock: top;
+}
+
+Footer {
+    background: #161b22;
+    color: #8b949e;
+    dock: bottom;
+}
+
+/* ── Dashboard ── */
+#banner {
+    width: 100%;
+    height: 5;
+    content-align: center middle;
+    text-align: center;
+    color: #f0883e;
+    text-style: bold;
+    background: #161b22;
+    border: heavy #f0883e;
+    margin-bottom: 1;
+}
+
+#kpi-row {
+    width: 100%;
+    height: auto;
+    padding: 0 1;
+    margin-bottom: 1;
+}
+
+KPICard {
+    width: 1fr;
+    height: 7;
+    border: heavy #30363d;
+    padding: 1 2;
+    margin: 0 1;
+    background: #161b22;
+    content-align: center middle;
+}
+
+KPICard .kpi-label {
+    text-style: bold;
+    color: #8b949e;
+    text-align: center;
+    width: 100%;
+}
+
+KPICard .kpi-value {
+    text-style: bold;
+    color: #f0883e;
+    text-align: center;
+    width: 100%;
+}
+
+KPICard .kpi-sub {
+    color: #484f58;
+    text-align: center;
+    width: 100%;
+}
+
+#panels-row {
+    width: 100%;
+    height: 1fr;
+    padding: 0 1;
+}
+
+#category-panel {
+    width: 2fr;
+    height: 100%;
+    border: heavy #30363d;
+    background: #161b22;
+    margin-right: 1;
+}
+
+#status-panel {
+    width: 1fr;
+    height: 100%;
+    border: heavy #30363d;
+    background: #161b22;
+}
+
+#status-content {
+    padding: 1 2;
+}
+
+#quick-actions {
+    padding: 1 2;
+    color: #8b949e;
+}
+
+/* ── Dashboard container ── */
+#dashboard-container {
+    width: 100%;
+    height: 100%;
+    padding: 1;
+    overflow-y: auto;
+}
+
+/* ── Catalog ── */
+#catalog-container {
+    width: 100%;
+    height: 100%;
+    padding: 1;
+}
+
+#catalog-toolbar {
+    width: 100%;
+    height: 3;
+    margin-bottom: 1;
+}
+
+#search-input {
+    width: 2fr;
+    margin-right: 1;
+}
+
+#filter-label {
+    width: 1fr;
+    height: 3;
+    content-align-vertical: middle;
+    padding: 1;
+    color: #f0883e;
+}
+
+#catalog-body {
+    width: 100%;
+    height: 1fr;
+}
+
+#category-tree-panel {
+    width: 25;
+    height: 100%;
+    border: heavy #30363d;
+    background: #161b22;
+    margin-right: 1;
+}
+
+#product-table-panel {
+    width: 1fr;
+    height: 100%;
+    border: heavy #30363d;
+    background: #161b22;
+}
+
+#product-count {
+    height: 1;
+    color: #8b949e;
+    padding: 0 1;
+}
+
+#pagination-bar {
+    width: 100%;
+    height: 2;
+    dock: bottom;
+}
+
+/* ── Product Detail ── */
+#detail-container {
+    width: 100%;
+    height: 100%;
+    padding: 1;
+}
+
+#product-header {
+    width: 100%;
+    height: auto;
+    padding: 1 2;
+    background: #161b22;
+    border: heavy #f0883e;
+    margin-bottom: 1;
+}
+
+#detail-body {
+    width: 100%;
+    height: 1fr;
+}
+
+#info-panel {
+    width: 2fr;
+    height: 100%;
+    border: heavy #30363d;
+    background: #161b22;
+    margin-right: 1;
+    overflow-y: auto;
+}
+
+#market-panel {
+    width: 1fr;
+    height: 100%;
+    border: heavy #30363d;
+    background: #161b22;
+    padding: 1;
+}
+
+#product-info {
+    padding: 1 2;
+}
+
+#product-desc {
+    padding: 1 2;
+    color: #8b949e;
+}
+
+#market-state {
+    margin-bottom: 1;
+}
+
+/* ── Pricing ── */
+#pricing-container {
+    width: 100%;
+    height: 100%;
+    padding: 1;
+}
+
+#pricing-toolbar {
+    width: 100%;
+    height: auto;
+    margin-bottom: 1;
+}
+
+#product-id-input {
+    width: 1fr;
+    margin-right: 1;
+}
+
+#steps-input {
+    width: 20;
+    margin-right: 1;
+}
+
+#btn-run {
+    width: auto;
+}
+
+#pricing-body {
+    width: 100%;
+    height: 1fr;
+}
+
+#simulation-panel {
+    width: 2fr;
+    height: 100%;
+    border: heavy #30363d;
+    background: #161b22;
+    margin-right: 1;
+    padding: 0 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#reward-panel {
+    width: 1fr;
+    height: 100%;
+    border: heavy #30363d;
+    background: #161b22;
+    padding: 0 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#sim-status {
+    padding: 1 2;
+    color: #58a6ff;
+}
+
+#price-sparkline {
+    padding: 0 2;
+    height: 2;
+}
+
+#reward-sparkline {
+    padding: 0 2;
+    height: 2;
+    margin-bottom: 1;
+}
+
+#reward-breakdown {
+    padding: 1;
+}
+
+#sim-summary {
+    padding: 1 2;
+}
+
+#competitor-info {
+    padding: 1 2;
+}
+
+/* ── Analytics ── */
+#analytics-container {
+    width: 100%;
+    height: 100%;
+    padding: 1;
+}
+
+#analytics-top {
+    width: 100%;
+    height: 1fr;
+    margin-bottom: 1;
+}
+
+#metrics-panel {
+    width: 1fr;
+    height: 100%;
+    border: heavy #30363d;
+    background: #161b22;
+    margin-right: 1;
+    overflow-y: auto;
+}
+
+#agg-metrics {
+    padding: 1 2;
+}
+
+#category-stats-panel {
+    width: 2fr;
+    height: 100%;
+    border: heavy #30363d;
+    background: #161b22;
+}
+
+#analytics-bottom {
+    width: 100%;
+    height: 1fr;
+    border: heavy #30363d;
+    background: #161b22;
+}
+
+#history-count {
+    height: 1;
+    color: #8b949e;
+    padding: 0 1;
+}
+
+/* ── Settings ── */
+#settings-container {
+    width: 100%;
+    height: 100%;
+    padding: 1;
+}
+
+#settings-body {
+    width: 100%;
+    height: 1fr;
+}
+
+#weights-panel {
+    width: 1fr;
+    height: 100%;
+    border: heavy #30363d;
+    background: #161b22;
+    margin-right: 1;
+    padding: 1;
+    overflow-y: auto;
+}
+
+#options-panel {
+    width: 1fr;
+    height: 100%;
+    border: heavy #30363d;
+    background: #161b22;
+    padding: 1;
+    overflow-y: auto;
+}
+
+#formula {
+    padding: 1 2;
+    color: #f0883e;
+    text-style: bold italic;
+}
+
+.setting-label {
+    height: 1;
+    padding: 0 2;
+    margin-top: 1;
+    color: #8b949e;
+    text-style: bold;
+}
+
+#settings-status {
+    padding: 1 2;
+    margin-top: 1;
+}
+
+/* ── Shared DataTable styling ── */
+DataTable {
+    height: 1fr;
+    background: #0d1117;
+    color: #c9d1d9;
+}
+
+DataTable > .datatable--header {
+    background: #21262d;
+    color: #f0883e;
+    text-style: bold;
+}
+
+DataTable > .datatable--cursor {
+    background: #1f6feb;
+    color: #ffffff;
+}
+
+DataTable > .datatable--hover {
+    background: #161b22;
+}
+
+/* ── Shared button styling ── */
+Button {
+    margin: 1 2;
+}
+
+Button.-primary {
+    background: #f0883e;
+    color: #0d1117;
+}
+
+Button.-primary:hover {
+    background: #d47527;
+}
+
+Button.-warning {
+    background: #d29922;
+    color: #0d1117;
+}
+
+/* ── Input styling ── */
+Input {
+    border: tall #30363d;
+    background: #0d1117;
+    color: #c9d1d9;
+}
+
+Input:focus {
+    border: tall #f0883e;
+}
+
+/* ── Select styling ── */
+Select {
+    border: tall #30363d;
+    background: #0d1117;
+}
+
+/* ── Tree styling ── */
+Tree {
+    background: #0d1117;
+    color: #c9d1d9;
+    padding: 1;
+}
+
+Tree > .tree--cursor {
+    background: #1f6feb;
+    color: #ffffff;
+}
+
+Tree > .tree--highlight {
+    background: #161b22;
+}
+
+/* ── SectionHeader ── */
+SectionHeader {
+    width: 100%;
+    height: 1;
+    background: #21262d;
+    color: #f0883e;
+    text-style: bold;
+    padding: 0 1;
+}
