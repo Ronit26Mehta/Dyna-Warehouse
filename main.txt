@@ -1,0 +1,819 @@
+University of Mumbai
+Academic Year 2025–2026
+A Framework for
+Autonomous Price Optimization
+Using Deep Reinforcement
+Learning
+Submitted in partial fulfilment of the requirements of the degree of
+Bachelor of Technology in Computer Science and Engineering (Data Science)
+By
+60009220209 Hitarth Bhatt
+60009220063 Hetansh Shah
+60009220058 Jenil Shah
+Under the Guidance of
+Dr. Poonam Jadhav
+Certificate
+This is to certify that the project entitled, “A framework for Autonomous
+Price Optimization using Deep Reinforcement Learning” is a bonafide work
+of Hitarth Bhatt (60009220209), Hetansh Shah (60009220063), and Jenil
+Shah (60009220058) submitted in partial fulfillment of the requirement for the
+award of the Bachelor of Technology in Computer Science and Engineering(Data
+Science).
+Dr. Poonam Jadhav
+Dr. Kriti Srivastava Dr. Hari Vasudevan
+Head of the Department Principal
+Place:
+Date:
+DECLARATION
+We declare that this written submission represents our ideas in our own words
+and where other’s ideas or words have been included, we have adequately cited
+and referenced the original sources. We also declare that we have adhered to all the
+principles of academic honesty and integrity and have not misrepresented, fabricated,
+or falsified any idea/data/fact/source in our submission. We understand that any
+violation of the above will cause disciplinary action by the Institute and can also
+evoke penal action from the sources, which have thus not been properly cited or
+from whom proper permission has not been taken when needed.
+Hitarth Bhatt 60009220209
+Hetansh Shah 60009220063
+Jenil Shah 60009220058
+APPROVAL SHEET
+This project report entitled A framework for Autonomous Price Optimization using Deep Reinforcement Learning by Hitarth Bhat, Hetansh
+Shah, Jenil Shah is approved for the degree of B.Tech. in Computer Science and
+Engineering (Data Science).
+Examiners :
+1.
+2.
+Place:
+Date:
+ACKNOWLEDGEMENT
+We would like to express our sincere gratitude to everyone who played a part in the
+success of this research project. First and foremost, we extend our heartfelt thanks
+to Dr. Poonam Jadhav, faculty member of the Computer Science and Engineering
+(Data Science) Department, and our project guide. Her guidance, expertise, and
+thoughtful feedback were pivotal in shaping the course of this project. We are truly
+appreciative of the time and effort she dedicated to enhancing the quality of our
+work.
+We also wish to convey our deep appreciation to the faculty members and our Head
+of Department, Dr. Kriti Srivastava, of the Computer Science and Engineering
+(Data Science) Department at Dwarkadas J. Sanghvi College of Engineering. Their
+unwavering support and encouragement in nurturing an environment conducive to
+learning and innovation have been fundamental to the success of our research.
+Furthermore, we would like to thank our Principal, Dr. Hari Vasudevan, for
+providing access to the college’s library resources, which proved to be an invaluable
+asset to our research by offering essential reference materials.
+Abstract
+Dynamic pricing in e-commerce is a critical challenge due to the inability of traditional, manual pricing strategies to adapt to volatile market conditions in real-time.
+This inefficiency leads to missed revenue opportunities and reduced market competitiveness. This project proposes a fully autonomous dynamic pricing framework
+for e-commerce platforms that leverages Deep Reinforcement Learning to overcome
+these limitations. The core of the system is the implementation of the Soft ActorCritic (SAC) algorithm, an advanced, model-free approach capable of handling the
+continuous action space required for precise price adjustments. The agent is designed
+to learn an optimal pricing policy by processing a high-dimensional state representation that integrates real-time data on user behavior, inventory levels, competitor
+pricing, and seasonal trends. A key innovation of this framework is its sophisticated,
+context-aware reward function, which is engineered to balance immediate revenue
+maximization with long-term strategic objectives. This is achieved through a novel
+conditional stability penalty that promotes customer-friendly price stability during
+normal market conditions while allowing for aggressive, opportunistic pricing during
+defined ”market shocks.” By training within a high-fidelity market simulator, the
+agent learns to make intelligent, data-driven decisions that maximize profitability
+while maintaining market competitiveness, all without human intervention. The
+project’s effectiveness and decision-making process are demonstrated via a webbased interface for interactive testing.
+Keywords: Dynamic Pricing, Deep Reinforcement Learning, Soft Actor-Critic
+(SAC), Autonomous Systems, Price Optimization, E-commerce, Market Simulation,
+Reward Engineering, Continuous Action Space, Intelligent Agent
+Table of Contents
+Table of Contents vii
+List of Figures viii
+List of Tables ix
+1 Introduction 1
+1.1 Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1
+1.2 Project Overview . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1
+1.3 Motivation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+1.4 Project Outcome . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2
+1.5 Organization of the Report . . . . . . . . . . . . . . . . . . . . . . . . 3
+2 Literature Review 5
+2.1 Preliminaries . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+2.1.1 Dynamic Pricing Systems . . . . . . . . . . . . . . . . . . . . 5
+2.1.2 Reinforcement Learning (RL) . . . . . . . . . . . . . . . . . . 5
+2.1.3 Deep Reinforcement Learning (DRL) . . . . . . . . . . . . . . 6
+2.1.4 Soft Actor-Critic (SAC) . . . . . . . . . . . . . . . . . . . . . 6
+2.2 Literature Review . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6
+2.2.1 Similar Applications . . . . . . . . . . . . . . . . . . . . . . . 6
+2.2.2 Related Research . . . . . . . . . . . . . . . . . . . . . . . . . 7
+2.3 Gap Analysis . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 7
+2.4 Summary . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 8
+3 Problem Definition and Objectives 10
+3.1 Problem Definition . . . . . . . . . . . . . . . . . . . . . . . . . . . . 10
+3.2 Objectives . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 11
+3.3 Key Challenges . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 11
+3.4 Summary . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 12
+vi
+Table of Contents Table of Contents
+4 Proposed Methodology 13
+4.1 System Architecture Overview . . . . . . . . . . . . . . . . . . . . . . 13
+4.2 Reinforcement Learning Framework . . . . . . . . . . . . . . . . . . . 13
+4.2.1 State (S) . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 14
+4.2.2 Action (A) . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 15
+4.2.3 Reward Function (R) . . . . . . . . . . . . . . . . . . . . . . . 15
+4.2.4 Learning Algorithm: Soft Actor-Critic (SAC) . . . . . . . . . 16
+4.3 Evaluation Metrics . . . . . . . . . . . . . . . . . . . . . . . . . . . . 16
+4.4 Summary . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 16
+5 Data Set Details 17
+5.1 Data Components . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 17
+5.2 Data Preprocessing . . . . . . . . . . . . . . . . . . . . . . . . . . . . 18
+5.3 Integration into Reinforcement Learning Environment . . . . . . . . . 19
+5.4 Summary . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 19
+6 Conclusion and Future Scope 20
+6.1 Summary . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 20
+6.2 Limitation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 21
+6.3 Future Work . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 21
+References 25
+vii
+List of Figures
+4.1 System Architecture of the Proposed Solution . . . . . . . . . . . . . 14
+viii
+List of Tables
+2.1 Summary of Related Research. . . . . . . . . . . . . . . . . . . . . . . 7
+2.2 Analysis of Research Gaps and Proposed Methods . . . . . . . . . . . 8
+2.3 Comparative Gap Analysis of Existing Dynamic Pricing Models. Checkmarks indicate the presence of significant limitations in the respective
+areas. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+ix
+Chapter 1
+Introduction
+1.1 Introduction
+In recent years, e-commerce has emerged as one of the most competitive and dynamic
+sectors of the digital economy. The ability to determine optimal prices in real time
+has become a decisive factor for businesses striving to maintain profitability and
+competitiveness. Traditional pricing methods, which rely on static rules or human
+intervention, are inherently limited in their capacity to respond to rapid fluctuations
+in demand, competition, and market trends [1, 2, 3]. As a result, organizations often
+miss opportunities for maximizing revenue and customer retention.
+To address these challenges, this project proposes the development of an intelligent, data-driven dynamic pricing system based on Deep Reinforcement Learning
+(DRL). The system autonomously determines optimal prices through continuous
+learning from real-time market signals, including user engagement metrics, inventory levels, competitor pricing, and seasonal variations. By leveraging the Soft
+Actor-Critic (SAC) algorithm, the framework aims to achieve precise, context-aware
+pricing decisions that balance short-term profit with long-term business objectives
+[4, 5].
+1.2 Project Overview
+The proposed system introduces a fully autonomous dynamic pricing framework
+designed for e-commerce platforms. It utilizes Deep Reinforcement Learning to
+dynamically adjust product prices based on live data streams, allowing the model
+to adapt instantly to changing market conditions [6, 7]. At its core lies the Soft
+Actor-Critic (SAC) algorithm, a model-free reinforcement learning approach that
+operates in continuous action spaces. This enables the system to make fine-grained
+1
+1.3. Motivation Chapter 1. Introduction
+adjustments rather than relying on predefined price intervals [8].
+The framework integrates a high-dimensional state representation composed of
+multiple real-time variables such as product price, inventory, competitor pricing,
+and user activity. It learns optimal policies through repeated interaction with a
+simulated market environment, optimizing a reward function that encourages both
+profit maximization and market stability. The reward function introduces adaptive
+penalties for overpricing, stock depletion, and erratic fluctuations while rewarding
+strategic pricing moves that improve competitiveness [9, 10].
+1.3 Motivation
+E-commerce companies face constant challenges in maintaining profitability amidst
+fluctuating demand, aggressive competition, and seasonal influences. Conventional
+rule-based or regression-driven models are often reactive, not proactive, and require
+frequent manual intervention [1, 2]. This research is motivated by the need to develop
+an intelligent system that can autonomously adapt to such dynamic environments
+and make informed pricing decisions [6].
+Deep Reinforcement Learning offers a computational paradigm that enables systems to learn through interaction with their environment. By using the SAC algorithm, this framework learns to make optimal decisions in continuous action spaces,
+which is essential for real-world pricing applications [4, 5]. The motivation behind
+this work stems from bridging the gap between static pricing strategies and truly autonomous, self-learning frameworks that operate efficiently without human oversight
+[7, 10].
+This project also aims to contribute to the field by introducing a novel reward
+function that ensures price stability during normal conditions while encouraging
+adaptive, high-reward strategies during competitive market fluctuations. The motivation extends beyond profit — it aims to enhance decision-making intelligence in
+business automation [8, 9].
+1.4 Project Outcome
+The project aims to deliver a fully functional, autonomous dynamic pricing system
+that leverages Deep Reinforcement Learning to intelligently adjust prices in real
+time [1, 2]. The framework is designed not only as a proof of concept but also as a
+foundation for large-scale, real-world e-commerce deployment.
+The expected outcomes of this project are as follows:
+2
+1.5. Organization of the Report Chapter 1. Introduction
+• Development of an intelligent, self-learning pricing system capable of real-time
+decision-making without human intervention [6].
+• Implementation of the Soft Actor-Critic (SAC) algorithm to optimize continuous pricing actions by balancing exploration and exploitation [4, 5].
+• Design of a context-aware reward function that simultaneously maximizes
+profit, maintains price stability, and preserves competitiveness in dynamic
+markets [7].
+• Integration of diverse, real-time data sources — including customer interaction
+logs, inventory levels, competitor prices, and seasonal patterns — into a unified
+decision-making model [8, 10].
+• Development of a simulation-driven environment to train and test the agent
+before deployment in live systems, ensuring robustness and safety [9].
+• Creation of an interactive web-based dashboard that visualizes the system’s
+decision-making process, enabling easier analysis of performance and insights.
+• Comprehensive evaluation of the model using quantitative metrics such as
+profitability improvement, reduction in price volatility, and increase in user
+retention rate.
+The ultimate outcome of this project is to demonstrate that reinforcement learning can serve as a practical, scalable, and intelligent pricing mechanism capable of
+autonomously adapting to market dynamics while maintaining both profitability
+and customer satisfaction [1, 2, 5].
+1.5 Organization of the Report
+This report is organized into the following chapters to provide a clear and structured
+understanding of the entire project workflow:
+Chapter 1 – Introduction: Provides a comprehensive overview of the project,
+including its motivation, objectives, expected outcomes, and overall structure.
+Chapter 2 – Literature Review: Presents a detailed summary of existing research related to dynamic pricing, reinforcement learning algorithms, and
+data-driven decision frameworks, while identifying key research gaps [1, 4, 7].
+3
+1.5. Organization of the Report Chapter 1. Introduction
+Chapter 3 – Problem Definition and Objectives: Clearly defines the research
+problem, discusses the challenges involved, and states the project’s main and
+secondary objectives.
+Chapter 4 – Proposed Solution: Describes the system architecture and methodology in depth, emphasizing the use of the Soft Actor-Critic algorithm, reward
+function design, and evaluation framework [5, 8].
+Chapter 5 – Novelty: Explains the unique aspects of the proposed work, including its innovative reward function, adaptive pricing mechanism, and integration of contextual market awareness.
+Chapter 6 – Conclusion: Summarizes the findings, reflects on the system’s performance and limitations, and highlights future directions to extend the framework for multi-product and multi-market applications [2, 9].
+Chapter 7 – References: Lists all the research papers, books, and online resources cited throughout the report, following standard academic citation practices.
+4
+Chapter 2
+Literature Review
+This chapter presents a comprehensive review of the existing state-of-the-art in
+dynamic pricing and reinforcement learning-based optimization systems. It systematically analyzes prior work in pricing automation, reinforcement learning algorithms, and related intelligent decision-making frameworks. The review highlights
+key methodologies, identifies their strengths and shortcomings, and concludes with
+the critical research gaps that motivate the development of the proposed Deep Reinforcement Learning–based Autonomous Price Optimization Framework.
+2.1 Preliminaries
+To understand the evolution of dynamic pricing automation, it is necessary to establish a foundation of key concepts and computational techniques that underpin
+intelligent pricing systems.
+2.1.1 Dynamic Pricing Systems
+Dynamic pricing refers to the process of automatically adjusting product prices
+based on real-time market conditions, demand, competition, and inventory. Early
+implementations relied on rule-based mechanisms and econometric models that
+lacked adaptability and scalability. With advancements in machine learning, modern pricing systems leverage predictive analytics to anticipate demand and adjust
+prices dynamically [1, 2, 3].
+2.1.2 Reinforcement Learning (RL)
+Reinforcement Learning is a branch of machine learning where an agent learns optimal actions by interacting with an environment and receiving feedback in the form
+5
+2.2. Literature Review Chapter 2. Literature Review
+of rewards. RL enables autonomous decision-making by optimizing long-term cumulative rewards rather than immediate outcomes, making it ideal for continuous
+market optimization tasks like pricing [4, 7].
+2.1.3 Deep Reinforcement Learning (DRL)
+Deep Reinforcement Learning extends traditional RL by using deep neural networks
+to approximate value functions and policies. Algorithms like DQN, DDPG, and
+SAC enable intelligent agents to operate in complex, high-dimensional spaces with
+continuous state and action variables. DRL models have shown success in domains
+such as finance, robotics, and supply chain management [9, 10].
+2.1.4 Soft Actor-Critic (SAC)
+The Soft Actor-Critic algorithm is an entropy-regularized actor–critic method that
+optimizes both reward maximization and exploration. SAC excels in continuous
+control tasks, making it particularly suitable for dynamic pricing where fine-grained
+adjustments are necessary. The inclusion of an entropy term encourages exploration,
+preventing premature convergence to suboptimal pricing strategies [6, 8].
+2.2 Literature Review
+2.2.1 Similar Applications
+The application of RL and DRL in dynamic pricing has expanded across industries
+including e-commerce, airlines, and retail logistics:
+• E-commerce: Das et al. (2024) applied machine learning regression models
+for price prediction and optimization in online marketplaces [1]. However,
+their approach lacked adaptability to real-time changes.
+• Energy and Utilities: Ismail and Baysal (2023) used actor–critic models
+for demand response pricing in electricity markets [7], achieving moderate
+efficiency but limited scalability.
+• Travel and Airlines: Shihab (2020) implemented a DRL-based airline pricing model (DeepARM) to manage fare and seat inventory dynamically [9].
+• Retail and Hospitality: Mei (2025) developed a dynamic pricing system
+using DRL for hotel room pricing based on occupancy and seasonal trends [2],
+yet it lacked contextual competitor pricing integration.
+6
+2.3. Gap Analysis Chapter 2. Literature Review
+2.2.2 Related Research
+Here report the summary of the investigation of the research literature. The following subsections provide detailed analyses of seminal works in dynamic pricing and
+reinforcement learning, examining their methodologies, contributions, and limitations. Table 2.1 summarizes these key works.
+Table 2.1: Summary of Related Research.
+Paper Name (and
+Authors)
+Methodology Key Results
+Q-Learning for
+Dynamic Pricing
+(Balogun et al.,
+2025)
+Employed a Q-learning framework
+with discrete pricing actions modeled
+as an MDP. The Q-table was updated
+iteratively based on simulated market
+interactions.
+Demonstrated improved profitability compared to
+static and rule-based
+pricing models.
+Deep Q-Networks
+for Retail Price
+Optimization (Das
+et al., 2024)
+Integrated Deep Q-Networks (DQN)
+with e-commerce data. A neural
+network was used to approximate
+Q-values, handling high-dimensional
+states.
+Achieved higher
+cumulative revenue compared to
+regression-based
+baselines.
+Actor–Critic
+Framework for
+Market Demand
+Forecasting (Chen
+et al., 2021)
+Proposed an actor–critic architecture
+where the actor network determines
+pricing actions and the critic estimates long-term expected returns.
+Facilitated continuous decisionmaking and
+achieved stable
+convergence.
+Hybrid Random Forest and
+Q-Learning Approach (Hooda et
+al., 2024)
+Combined supervised learning (Random Forest) to estimate demand elasticity with reinforcement learning (Qlearning) to optimize long-term rewards.
+Demonstrated
+higher stability in
+uncertain demand
+conditions.
+Soft Actor-Critic
+for Continuous
+Dynamic Pricing
+(Proposed Framework)
+Applies the Soft Actor-Critic (SAC)
+algorithm for continuous price adjustments based on a dynamic state (inventory, competitor prices, user behavior).
+(Proposed) Enables
+continuous, datadriven price adjustments in realtime.
+2.3 Gap Analysis
+Here summarise the gap where you intend to work. The following table (Table 2.2)
+details the specific research gaps identified and the methods proposed to resolve
+them.
+7
+2.4. Summary Chapter 2. Literature Review
+Table 2.2: Analysis of Research Gaps and Proposed Methods
+Research Gap Method to Resolve Gap
+1. Limited Adaptability in Traditional Models: Existing dynamic
+pricing models rely on heuristics or
+predefined rules, making them brittle
+and unable to learn from new data or
+adapt to market shifts.
+Develop a dynamic pricing system using the Soft Actor-Critic (SAC)
+algorithm. This allows the model to
+continuously learn from and adapt to
+real-time data, moving beyond rigid,
+rule-based systems.
+2. Insufficient Use of Advanced
+RL Algorithms: Simpler RL models
+like Q-learning struggle with the continuous and high-dimensional nature
+of pricing decisions. Sophisticated algorithms better suited for these tasks,
+like SAC, remain underutilized.
+The use of the Soft Actor-Critic
+(SAC) algorithm directly addresses
+this gap. SAC is specifically designed for environments with continuous action spaces, enabling finegrained price adjustments that simpler models cannot handle.
+3. Oversimplified State Representation: Current RL models for
+pricing often use a simplified view of
+the market, ignoring complex interactions between factors like inventory,
+user behavior, and seasonality.
+Incorporate a comprehensive,
+high-dimensional state representation that includes inventory levels,
+competitor prices, user engagement
+metrics, and seasonal data. This provides a richer, more accurate picture
+of the market for more intelligent
+decision-making.
+2.4 Summary
+This literature review systematically examined prior approaches to dynamic pricing optimization, identifying recurring challenges in scalability, adaptability, and
+contextual understanding [1, 5, 8].
+Existing methods, including Q-learning and supervised regression models, show
+limited ability to handle continuous pricing spaces or contextual market features.
+The review establishes that while reinforcement learning provides a strong foundation for autonomous price optimization, there is a need for:
+• Context-aware, multi-objective reward functions balancing profit, competitiveness, and stability.
+• Continuous, fine-grained action spaces handled efficiently by Soft Actor-Critic
+algorithms.
+• Real-time adaptability powered by streaming data integration and autonomous
+feedback loops.
+8
+2.4. Summary Chapter 2. Literature Review
+Table 2.3: Comparative Gap Analysis of Existing Dynamic Pricing Models. Checkmarks indicate the presence of significant limitations in the respective areas.
+Model Limited
+RealTime
+Adaptability
+Simplified
+Reward
+Design
+Discrete
+Action
+Constraint
+Low
+Context
+Awareness
+High
+Computational
+Overhead
+Competitive
+Market
+Handling
+Rule-Based
+Pricing
+✓ ✓ ✓ ✓ ✓
+Machine
+Learning Regression
+✓ ✓ ✓ ✓ ✓
+Q-Learning ✓ ✓ ✓ ✓ ✓
+Deep QNetwork
+(DQN)
+✓ ✓ ✓ ✓ ✓ ✓
+Actor–Critic
+Framework
+✓ ✓ ✓ ✓
+Hybrid RF +
+Q-Learning
+✓ ✓ ✓ ✓ ✓ ✓
+These insights form the foundation for the proposed Deep Reinforcement Learning–based Autonomous Price Optimization framework presented in the next chapter, which aims to bridge these identified research gaps through intelligent design,
+modular scalability, and context-driven learning.
+9
+Chapter 3
+Problem Definition and Objectives
+This chapter defines the problem addressed by the project and outlines the specific
+objectives established to achieve the intended outcomes through the proposed Deep
+Reinforcement Learning-based framework.
+3.1 Problem Definition
+Dynamic pricing in e-commerce represents a critical and complex challenge due to
+the inability of traditional pricing mechanisms to adapt efficiently to fluctuating
+market conditions. Most existing systems rely on static or rule-based strategies that
+fail to incorporate real-time market data, user behavior, and competitive dynamics.
+These limitations lead to suboptimal pricing decisions, missed revenue opportunities, and reduced market competitiveness. Moreover, manual pricing adjustments
+are not scalable for large product catalogs and cannot respond quickly to volatile
+market changes.
+The central problem addressed in this project is:
+To design and implement an autonomous dynamic pricing framework using Deep Reinforcement Learning (specifically, the Soft
+Actor-Critic algorithm) that optimizes product prices in real
+time by learning from multidimensional market signals while
+ensuring profitability, price stability, and competitiveness.
+The system must learn an optimal pricing policy that dynamically balances immediate revenue maximization with long-term business sustainability through continuous interaction with the market environment.
+10
+3.2. Objectives Chapter 3. Problem Definition and Objectives
+3.2 Objectives
+The primary and secondary objectives of this project are as follows:
+Primary Objectives
+• To design and develop a fully autonomous dynamic pricing framework based
+on Deep Reinforcement Learning capable of real-time decision-making without
+human intervention.
+• To implement the Soft Actor-Critic (SAC) algorithm to handle continuous
+action spaces, enabling precise and context-aware price adjustments.
+• To construct an adaptive, context-sensitive reward function that balances
+short-term profitability with long-term stability and customer retention.
+Secondary Objectives
+• To integrate diverse, real-time data sources including customer engagement,
+inventory levels, competitor pricing, and seasonal variations into a unified state
+representation.
+• To design and simulate a high-fidelity market environment that enables safe
+and efficient training of the reinforcement learning agent before deployment.
+• To evaluate the framework using quantitative performance metrics such as
+profit improvement, price volatility reduction, and user retention rate.
+• To visualize and interpret the agent’s decision-making process through an interactive web-based interface for transparency and analysis.
+3.3 Key Challenges
+The major challenges encountered in this research include:
+• Ensuring convergence and stability of the reinforcement learning model in a
+non-stationary market environment.
+• Designing a multi-objective reward function that effectively balances conflicting goals such as profit maximization and customer satisfaction.
+• Handling high-dimensional, continuous state and action spaces without overfitting or excessive computational overhead.
+11
+3.4. Summary Chapter 3. Problem Definition and Objectives
+• Achieving scalability and adaptability to real-time data streams for dynamic
+market conditions.
+3.4 Summary
+This chapter formally defined the problem and outlined the specific objectives of the
+project. The next chapter presents the proposed methodology and system design,
+detailing the architecture, algorithmic framework, and evaluation strategy developed
+to address the challenges identified here.
+12
+Chapter 4
+Proposed Methodology
+[Must be present in Stage I Report and also in Final Report]
+This chapter details the design of the intelligent, fully autonomous dynamic
+pricing framework, focusing on the Soft Actor-Critic (SAC) reinforcement learning
+model and its core components: State, Action, and the novel Reward Function.
+The proposed approach aims to enable adaptive price optimization in e-commerce
+through continuous learning from real-time market data.
+4.1 System Architecture Overview
+The proposed system introduces an intelligent, fully autonomous dynamic pricing
+framework that leverages the Soft Actor-Critic (SAC) reinforcement learning algorithm to determine optimal product prices in real time. The architecture consists
+of three major layers — Frontend, Backend, and Data Management — which
+together facilitate data acquisition, decision-making, and visualization.
+The system architecture (Figure 4.1) outlines the flow of information: real-time
+user interaction data, inventory levels, competitor prices, and seasonal variables are
+processed through the data layer. The SAC-based agent operates within the backend, continuously updating pricing policies based on observed market feedback. The
+frontend provides a web-based interface for visualization, allowing human operators
+to observe the model’s decisions without intervention.
+4.2 Reinforcement Learning Framework
+The proposed framework is formulated as a Markov Decision Process (MDP), defined
+by a tuple (S, A, R, P, γ) where:
+• S represents the state space (market conditions),
+13
+4.2. Reinforcement Learning Framework Chapter 4. Proposed Methodology
+Figure 4.1: System Architecture of the Proposed Solution
+• A is the action space (price adjustments),
+• R is the reward function,
+• P represents the transition dynamics, and
+• γ is the discount factor.
+The agent aims to maximize the expected cumulative reward:
+J(π) = Eπ
+"X
+T
+t=0
+γ
+tRt
+#
+(4.1)
+4.2.1 State (S)
+The State provides a comprehensive, real-time snapshot of the market environment
+as input to the agent’s policy network. The high-dimensional state vector includes:
+• Current Price (Pt): The product’s current price point.
+• Inventory Level (It): The stock available for the product.
+• Competitor Price (Pcomp): The average price among competing sellers.
+• User Engagement (Ut): Real-time user metrics such as clicks, views, and
+add-to-cart events.
+• Seasonal/Festive Indicator (Ft): Binary flag indicating special market
+events.
+14
+4.2. Reinforcement Learning Framework Chapter 4. Proposed Methodology
+4.2.2 Action (A)
+The action At represents the decision made by the agent — whether to increase,
+decrease, or maintain the product price. The framework uses a continuous action
+space, allowing fine-grained control over pricing actions:
+At ∈ R : Pt+1 = Pt + ∆Pt (4.2)
+where ∆Pt
+is the price change determined by the agent’s policy πθ(At
+|St).
+4.2.3 Reward Function (R)
+The reward function is engineered to balance profitability, competitiveness, stability,
+and inventory management. It is defined as:
+Rt = αRprofit − βPcompetitive − γPstability − δPinventory (4.3)
+Where:
+• Rprofit: Direct profit reward, given by:
+Rprofit = (Pt+1 − C) · Qt+1 (4.4)
+where C is the product cost and Qt+1 is the quantity sold.
+• Pcompetitive: Penalty or reward based on pricing competitiveness:
+Pcompetitive =
+
+
+
+λ1(Pt+1 − Pcomp − ϵ)
+2
+, if Pt+1 > Pcomp + ϵ (Overpriced)
+−wreward, if Pcomp − ζ ≤ Pt+1 ≤ Pcomp (Strategic Undercut)
+0, otherwise (Indifference Zone)
+(4.5)
+• Pstability: Penalizes frequent or erratic price changes:
+Pstability =
+
+Pt+1 − Pt
+Pt
+2
+(4.6)
+• Pinventory: Encourages optimal stock management:
+Pinventory = µ(Dleft − Dtarget)
+2
+(4.7)
+15
+4.3. Evaluation Metrics Chapter 4. Proposed Methodology
+4.2.4 Learning Algorithm: Soft Actor-Critic (SAC)
+SAC combines policy-based and value-based reinforcement learning. Its objective
+includes three losses — actor loss, critic loss, and temperature adjustment — to
+achieve a trade-off between exploration and exploitation:
+Jπ(θ) = Est∼D,at∼πθ
+[α log(πθ(at
+|st)) − Qϕ(st
+, at)] (4.8)
+JQ(ϕ) = E(st,at,rt,st+1)∼D
+
+1
+2
+(Qϕ(st
+, at) − yt)
+2
+
+(4.9)
+where
+yt = rt + γEat+1∼πθ
+
+Qϕ¯(st+1, at+1) − α log(πθ(at+1|st+1))
+(4.10)
+The temperature parameter α is tuned to maintain policy entropy, ensuring
+sufficient exploration:
+J(α) = Eat∼πt
+[−α log(πt(at
+|st)) − αHtarget] (4.11)
+4.3 Evaluation Metrics
+The model is evaluated on both profitability and behavioral stability. The two main
+performance metrics are:
+1. Price Volatility: Measures stability of price changes across time:
+Price Volatility =
+vuut
+1
+N
+X
+N
+i=1
+(Pi − P¯)
+2
+(4.12)
+2. User Retention Rate: Quantifies customer loyalty and satisfaction:
+User Retention Rate = 
+Number of Returning Customers
+Total Number of Unique Customers
+× 100
+(4.13)
+4.4 Summary
+This chapter described the overall design and learning mechanism of the proposed
+dynamic pricing framework. The integration of Soft Actor-Critic enables autonomous,
+continuous, and context-aware price optimization. The following chapter outlines
+the dataset and experimental setup used to train and evaluate this framework.
+16
+Chapter 5
+Data Set Details
+This chapter provides a detailed overview of the datasets utilized in the development
+and evaluation of the autonomous dynamic pricing framework. The data sources
+form the backbone of the reinforcement learning environment, supplying the agent
+with realistic market conditions and feedback signals necessary for effective training
+and testing.
+The dataset integrates both historical and real-time data streams, covering multiple aspects of the e-commerce environment. These data components collectively
+represent the state variables used in the Soft Actor-Critic (SAC) framework.
+5.1 Data Components
+The following data sources were used in constructing the simulated and real-time
+pricing environment:
+• User Behavior Data: This includes logs of customer interactions such as
+product views, clicks, cart additions, and purchases. These metrics help estimate real-time demand signals and customer interest trends, which directly
+influence the agent’s pricing policy.
+• Inventory Levels: Records of stock availability for each product are incorporated to prevent overpricing in low-stock situations and encourage depleting
+excess inventory efficiently. Inventory data directly influence the Pinventory
+term in the reward function.
+• Historical Pricing Data: Contains past records of product prices, sales
+quantities, and corresponding revenue. This data is primarily used to train
+the initial value estimators within the reinforcement learning environment and
+to calibrate the market simulator with realistic pricing–demand dynamics.
+17
+5.2. Data Preprocessing Chapter 5. Data Set Details
+• Competitor Pricing Data: Extracted from competing platforms through
+periodic web scraping. This information forms a critical component of the state
+vector and impacts the competitiveness penalty (Pcompetitive). It ensures that
+the model learns to maintain profitable yet competitive pricing in multi-seller
+environments.
+• Seasonal and Festive Data: Incorporates temporal features such as holidays, festivals, and promotional events that lead to significant fluctuations in
+consumer demand. These events are represented by a binary indicator (Ft)
+within the state vector, allowing the model to identify and adapt to market
+shocks.
+• Market Simulator Data: A controlled, high-fidelity simulation environment
+is developed using historical transaction data. The simulator models consumer
+responses to price changes under various market conditions, enabling the SAC
+agent to train safely before live deployment.
+5.2 Data Preprocessing
+To ensure consistency and effective learning, all datasets undergo rigorous preprocessing steps:
+• Missing values are handled using mean or median imputation, depending on
+the attribute type.
+• Numerical features such as price and demand are normalized using Min–Max
+scaling to the range [0, 1].
+• Categorical attributes (e.g., product category, event type) are encoded using
+one-hot or label encoding.
+• Time-series features are aligned and resampled to uniform intervals to preserve
+temporal dependencies.
+• Outlier detection and removal are performed using interquartile range (IQR)
+filtering to maintain data integrity.
+18
+5.3. Integration into Reinforcement Learning EnvironmentChapter 5. Data Set Details
+5.3 Integration into Reinforcement Learning Environment
+The final preprocessed datasets are integrated into the SAC training pipeline as
+follows:
+• State Vector Construction: Each timestep’s state St = [Pt
+, It
+, Pcomp, Ut
+, Ft
+]
+is constructed from synchronized data streams.
+• Reward Computation: The environment computes Rt dynamically based
+on observed sales outcomes and market feedback using the reward function
+defined in Chapter 4.
+• Experience Replay Buffer: Each transition (St
+, At
+, Rt
+, St+1) is stored in a
+replay memory to stabilize learning.
+• Simulation–to–Reality Transition: The model is first trained within the
+simulated dataset and later fine-tuned using live data from e-commerce APIs.
+5.4 Summary
+This chapter outlined the various datasets and preprocessing methodologies used in
+training and evaluating the proposed autonomous dynamic pricing framework. The
+integration of multi-source data — encompassing user behavior, inventory, competitor, and seasonal trends — ensures that the model operates within a rich, contextaware environment. These datasets collectively provide the foundation for realistic
+simulation, adaptive learning, and high-fidelity performance evaluation of the Soft
+Actor-Critic–based system.
+19
+Chapter 6
+Conclusion and Future Scope
+This chapter summarizes the outcomes of the proposed autonomous dynamic pricing
+framework and discusses its limitations and potential directions for future enhancements. The framework demonstrates the feasibility of applying Deep Reinforcement
+Learning (DRL), specifically the Soft Actor-Critic (SAC) algorithm, for real-time
+price optimization in e-commerce environments.
+6.1 Summary
+The research successfully designed and implemented a Deep Reinforcement Learning–based framework for autonomous price optimization. The system integrates
+real-time market variables such as user engagement, inventory levels, competitor
+pricing, and seasonal factors into a continuous learning pipeline. By utilizing the
+SAC algorithm, the agent achieves fine-grained price adjustments that balance shortterm profit maximization with long-term strategic stability. The study established
+the effectiveness of context-aware reward engineering, enabling the model to dynamically adapt to changing market conditions while maintaining profitability and
+competitiveness. Furthermore, the integration of multi-source data, a continuous
+action space, and a simulation-driven environment contributed to developing a realistic and efficient pricing framework. Overall, the project validates that Deep
+Reinforcement Learning—particularly the Soft Actor-Critic algorithm—can serve
+as a robust foundation for intelligent, self-adaptive dynamic pricing in modern ecommerce systems.
+20
+6.2. Limitation Chapter 6. Conclusion and Future Scope
+6.2 Limitation
+While the proposed framework demonstrates promising results, certain limitations
+were identified during implementation and testing:
+• Data Dependency: The system’s accuracy is highly dependent on the availability and quality of real-time market data. Inconsistent or delayed data
+streams can adversely impact decision-making.
+• Computational Overhead: The SAC algorithm, though effective, requires
+significant computational resources for training and retraining in high-dimensional
+state spaces.
+• Simplified Market Simulation: The simulated market environment, while
+realistic, may not fully capture the complexities of live multi-agent market
+dynamics.
+• Limited Multi-Agent Interaction: The current model assumes a singleagent pricing scenario and does not account for strategic interactions among
+multiple competing agents.
+• Deployment Constraints: Integrating the model into real-world production
+systems requires continuous monitoring, retraining, and safety checks to ensure
+reliability and fairness.
+6.3 Future Work
+Future enhancements will focus on expanding the framework’s capabilities to make
+it more adaptive, scalable, and realistic for industry-level deployment. The following
+directions are proposed:
+• Multi-Agent Reinforcement Learning: Extend the framework to simulate competitive markets where multiple autonomous pricing agents interact,
+enabling the study of equilibrium strategies and collaborative or adversarial
+behaviors.
+• Scalable Cloud-Based Implementation: Migrate training and inference
+pipelines to distributed cloud platforms to handle large-scale, real-time datasets
+efficiently.
+21
+6.3. Future Work Chapter 6. Conclusion and Future Scope
+• Enhanced Reward Design: Introduce hierarchical or multi-objective reward functions that incorporate customer satisfaction metrics, brand reputation, and long-term retention.
+• Integration with Real E-Commerce APIs: Connect the framework with
+live pricing systems (e.g., Shopify, Amazon Seller Central APIs) to test realworld applicability under live conditions.
+• Incorporation of Explainable AI (XAI): Embed interpretability modules
+to explain pricing decisions to business stakeholders, ensuring transparency
+and trust in automated systems.
+• Adaptive Learning Under Market Shocks: Implement online learning
+mechanisms to allow the model to rapidly adapt to sudden changes such as
+flash sales, demand spikes, or supply chain disruptions.
+In summary, this work lays the groundwork for a scalable, autonomous dynamic
+pricing system that bridges artificial intelligence with practical market adaptability.
+With future refinements in multi-agent interaction, explainability, and real-world integration, the framework can evolve into a next-generation intelligent pricing engine
+for e-commerce ecosystems.
+22
+Publication List
+[Optional] The main contributions of this research are either published or accepted
+or in preparation in journals and conferences as mentioned in the following list:
+Journal Articles
+1.
+Conference Papers
+1.
+Additional Publications
+Following is the list of relevant publications published in the course of the research
+that is not included in the thesis:
+1.
+23
+References
+[1] P. Das et al. Optimizing real-time dynamic pricing strategies in retail and
+e-commerce using machine learning models. The American Journal of Engineering and Technology, 6(12):163–177, 2024.
+[2] Z. Mei. Dynamic pricing strategy driven by deep reinforcement learning with
+empirical analysis on the collaborative optimization of hotel revenue management and customer satisfaction. International Journal of High Speed Electronics
+and Systems, 2025. Art. no. 2540865.
+[3] I. Singh. Dynamic pricing using reinforcement learning in hospitality industry. In Proceedings of the 2022 IEEE Bombay Section Signature Conference
+(IBSSC), pages 1–6, 2022.
+[4] Z. Chen et al. Adaptive and efficient resource allocation in cloud datacenters
+using actor-critic deep reinforcement learning. IEEE Transactions on Parallel
+and Distributed Systems, 33(8):1911–1923, 2021.
+[5] A. Hooda, A. Hooda, and D. Yadav. Adaptive real-time big data processing
+framework: A machine learning and reinforcement learning approach using
+random forest and q-learning for dynamic resource management. 2024.
+[6] P. Iyer et al. Leveraging reinforcement learning and neural networks for optimized dynamic pricing strategies in b2c markets. Australian Advanced AI
+Research Journal, 10(7), 2021.
+[7] A. Ismail and M. Baysal. Dynamic pricing based on demand response using
+actor-critic agent reinforcement learning. Energies, 16(14):5469, 2023.
+[8] S. S. Balogun, O. Mariam, S. O. Adebayo, and K. Victoria. Applications of
+reinforcement learning in dynamic pricing models for e-commerce businesses.
+World Journal of Advanced Research and Reviews, 26(3):1562–1573, 2025.
+24
+References References
+[9] S. A. M. Shihab. DeepARM: An airline revenue management system for dynamic pricing and seat inventory control using deep reinforcement learning.
+PhD thesis, Iowa State University, Ames, IA, USA, 2020.
+[10] J. Huang et al. Deep reinforcement learning-based trajectory pricing on ridehailing platforms. ACM Transactions on Intelligent Systems and Technology
+(TIST), 13(3):1–19, 2022.
+[11] A. Ismail and M. Baysal. Dynamic pricing based on demand response using
+actor-critic agent reinforcement learning. Energies, 16(14):5469, 2023.
+[12] Z. Mei. Dynamic pricing strategy driven by deep reinforcement learning with
+empirical analysis on the collaborative optimization of hotel revenue management and customer satisfaction. International Journal of High Speed Electronics
+and Systems, 2025.
+[13] A. Hooda, A. Hooda, and D. Yadav. Adaptive real-time big data processing
+framework: A machine learning and reinforcement learning approach using
+random forest and q-learning for dynamic resource management. 2024.
+[14] Z. Chen et al. Adaptive and efficient resource allocation in cloud datacenters
+using actor-critic deep reinforcement learning. IEEE Transactions on Parallel
+and Distributed Systems, 33(8):1911–1923, 2022.
+[15] J. Huang, L. Huang, M. L. Liu, H. Li, Q. Tan, X. Ma, J. Cui, and D.-S. Huang.
+Deep reinforcement learning-based trajectory pricing on ride-hailing platforms.
+ACM Transactions on Intelligent Systems and Technology, 13(3):1–19, 2022.
+25
+Plagiarism Report
+26
