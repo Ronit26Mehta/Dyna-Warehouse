@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "warehouse-pricing-tui"
+version = "1.0.0"
+description = "Autonomous Dynamic Pricing Warehouse TUI — A terminal-based warehouse management and dynamic pricing simulation system"
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.10"
+keywords = ["warehouse", "dynamic-pricing", "tui", "textual", "reinforcement-learning", "pricing-engine"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Office/Business",
+]
+dependencies = [
+    "textual>=0.89.0",
+    "rich>=13.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/your-username/warehouse"
+Documentation = "https://github.com/your-username/warehouse#readme"
+Repository = "https://github.com/your-username/warehouse"
+Issues = "https://github.com/your-username/warehouse/issues"
+
+[project.scripts]
+warehouse = "warehouse.app:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["warehouse*"]
